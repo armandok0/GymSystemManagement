@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "65ce531ba769c987a9986f74"
+  },
+  "first_name": "Admin",
+  "last_name": "-",
+  "country": "Greece",
+  "city": "Athens",
+  "address": "Zeas 50",
+  "email": "admin@peakperformancegym.com",
+  "username": "admin",
+  "password": "12345",
+  "role": "admin"
+},
+{
+  "_id": {
+    "$oid": "65ce57fd37be30e2553ac413"
+  },
+  "first_name": "Nikos",
+  "last_name": "Papas",
+  "country": "Afghanistan",
+  "city": "Kandahar",
+  "address": "Hoklama",
+  "email": "nikolaos@gmail.com",
+  "username": "nik",
+  "password": "12345",
+  "role": "user"
+},
+{
+  "_id": {
+    "$oid": "65cfa9f1706c2b1bf7722e3c"
+  },
+  "first_name": "Mike",
+  "last_name": "Johnson",
+  "country": "Barbados",
+  "city": "Bruce Vale",
+  "address": "Stafford 44",
+  "email": "mikeytheone@outlook.com",
+  "username": "mikejohn",
+  "password": "22222",
+  "role": "user"
+}]

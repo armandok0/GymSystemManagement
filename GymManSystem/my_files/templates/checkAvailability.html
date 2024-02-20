@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Check Availability</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+    <style>
+      #timeSlots input[type="radio"] {
+        display: none;
+      }
+      #timeSlots label {
+        display: block;
+        margin-bottom: 5px;
+        background-color: #f9dc5c;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #timeSlots label:hover {
+        background-color: #f0803c;
+      }
+      #timeSlots input[type="radio"]:checked + label {
+        background-color: #f0803c;
+      }
+      #timeSlots h3 {
+        color: white;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/static/logo.png" alt="Logo" />
+          <h1>Peak Performance Gym</h1>
+        </div>
+        {% if userHTML == 'admin' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+          <li><a href="/crudUsersHTML">Manage Users</a></li>
+          <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+          <li><a href="/createAnnouncementHTML">Manage Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% elif userHTML == 'user' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a class="active" href="/checkAvailabilityHTML">Book Reservations</a></li>
+          <li><a href="/userReservationHTML">Reservation History</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/loginHTML">Register / Log In</a></li>
+        </ul>
+        {% endif %}
+      </nav>
+
+      <h2>Check Availability</h2>
+      <form id="availabilityForm">
+        <label for="program">Select Program:</label>
+        <select id="program" name="program">
+          <option value="">All</option>
+          <option value="team">Team</option>
+          <option value="personal">Personal</option>
+        </select>
+        <br />
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="date" />
+        <br />
+        <button type="submit">Check Availability</button>
+      </form>
+
+      <div id="timeSlots"></div>
+
+      <script>
+        document
+          .getElementById("availabilityForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = {
+              program: form.querySelector('select[name="program"]').value,
+              date: form.querySelector('input[name="date"]').value,
+            };
+            fetch("/checkAvailability", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                var message = data.message;
+                if (message === "Available time slots") {
+                  var timeSlotsHTML = "<h3>Available Time Slots:</h3>";
+                  data.available_time_slots.forEach(function (timeSlot, index) {
+                    timeSlotsHTML +=
+                      `<input type="radio" id="timeSlot${index}" name="selectedTimeSlot" value="${timeSlot._id}" />` +
+                      `<label for="timeSlot${index}">Name: ${timeSlot.name}, Date: ${timeSlot.dates[0]}, Time: ${timeSlot.time}, Capacity: ${timeSlot.capacity}</label>` +
+                      "<br>";
+                  });
+                  timeSlotsHTML +=
+                    "<button type='button' onclick='reserveTimeSlot()'>Reserve Selected Time Slot</button>";
+                  document.getElementById("timeSlots").innerHTML =
+                    timeSlotsHTML;
+                } else {
+                  document.getElementById("timeSlots").innerHTML = "";
+                }
+                document.getElementById("availabilityMessage").innerHTML =
+                  message;
+              })
+              .catch((error) => console.error("Error:", error));
+          });
+
+        function reserveTimeSlot() {
+          var selectedTimeSlot = document.querySelector(
+            'input[name="selectedTimeSlot"]:checked'
+          );
+
+          if (!selectedTimeSlot) {
+            alert("Please select a time slot to reserve.");
+            return;
+          }
+          var serviceId = selectedTimeSlot.value;
+          if (!serviceId) {
+            alert("Invalid Service ID provided.");
+            return;
+          }
+          var formData = {
+            service_id: serviceId,
+          };
+          fetch("/reserveTimeSlot", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              alert(data.message);
+              location.reload();
+            })
+            .catch((error) => console.error("Error:", error));
+        }
+      </script>
+    </div>
+  </body>
+</html>

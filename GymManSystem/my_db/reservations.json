@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "65cea1e44bcad963e41ad968"
+  },
+  "user_id": "65ce57fd37be30e2553ac413",
+  "service_id": "65ce6877c7a5e5641eed7b20",
+  "reservation_date": "2024-02-16 01:44:36",
+  "status": "booked"
+},
+{
+  "_id": {
+    "$oid": "65cfaf6c706c2b1bf7722e3e"
+  },
+  "user_id": "65cfa9f1706c2b1bf7722e3c",
+  "service_id": "65cfa75b706c2b1bf7722e32",
+  "reservation_date": "2024-02-16 20:54:36",
+  "status": "booked"
+}]

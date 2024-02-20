@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Management</title>
+  <link rel="stylesheet" type="text/css" href="/static/stylesheet.css">
+</head>
+
+<body>
+  <div class="content">
+    <header>
+    </header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="/static/logo.png" alt="Logo">
+        <h1>Peak Performance Gym</h1>
+      </div>
+      <h1 style="text-align: center; color:rgb(255, 255, 255); margin-top: 10px;">(ADMIN)</h1>
+      {% if userHTML == 'admin' %}
+        <ul>
+          <li><a  href="/homeHTML">Home</a></li>
+          <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+          <li><a class="active" href="/crudUsersHTML">Manage Users</a></li>
+          <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+          <li><a href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% elif userHTML == 'user' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+          <li><a href="/userReservationHTML">Reservation History</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/loginHTML">Register / Log In</a></li>
+        </ul>
+        {% endif %}
+    </nav>
+
+    <h2>User Management</h2>
+
+    <table border="1">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Country</th>
+          <th>City</th>
+          <th>Address</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="users_table"></tbody>
+    </table>
+
+    <script>
+      //Display Users in table
+      function fetchUsers() {
+        fetch("/users")
+          .then((response) => response.json())
+          .then((users) => {
+            const usersTable = document.getElementById("users_table");
+            usersTable.innerHTML = "";
+            users.forEach((user) => {
+              usersTable.innerHTML += `
+              <tr id="${user._id}">
+                <td contenteditable="true">${user.first_name}</td>
+                <td contenteditable="true">${user.last_name}</td>
+                <td contenteditable="true">${user.email}</td>
+                <td contenteditable="true">${user.username}</td>
+                <td contenteditable="true">${user.password}</td>
+                <td contenteditable="true">${user.country}</td>
+                <td contenteditable="true">${user.city}</td>
+                <td contenteditable="true">${user.address}</td>
+                <td>${user.role}</td>
+                <td>
+                  <button class="green" onclick="updateUser('${user._id}')">Update</button>
+                  <button class="red" onclick="deleteUser('${user._id}')">Delete</button>
+                  <button class="purple" onclick="assignModifyRole('${user._id}', 'user')">User Role</button>
+                  <button class="purple" onclick="assignModifyRole('${user._id}', 'admin')">Admin Role</button>
+                </td>
+              </tr>
+            `;
+            });
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      // Update a user
+      function updateUser(userId) {
+        const updatedUser = {
+          first_name: document.getElementById(userId).cells[0].innerText,
+          last_name: document.getElementById(userId).cells[1].innerText,
+          email: document.getElementById(userId).cells[2].innerText,
+          username: document.getElementById(userId).cells[3].innerText,
+          password: document.getElementById(userId).cells[4].innerText,
+          country: document.getElementById(userId).cells[5].innerText,
+          city: document.getElementById(userId).cells[6].innerText,
+          address: document.getElementById(userId).cells[7].innerText,
+        };
+
+        fetch(`/users/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUser),
+        })
+          .then((response) => {
+            if (response.ok) {
+              fetchUsers();
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      // Delete a user
+      function deleteUser(userId) {
+        fetch(`/users/${userId}`, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (response.ok) {
+              fetchUsers();
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      // Assign or Modify user role
+      function assignModifyRole(userId, role) {
+        fetch(`/users/role/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: role }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              fetchUsers();
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+      fetchUsers();
+    </script>
+  </div>
+</body>
+</body>
+</html>

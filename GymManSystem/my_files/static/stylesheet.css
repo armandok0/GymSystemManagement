@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #231e23;
+    color: #333;
+    overflow-x: hidden;
+}
+
+body h2 {
+    text-align: center;
+    padding: 20px 0;
+    color: #f0803c;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    background-color: #221e22;
+    padding-top: 0px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+}
+
+.content {
+    margin-left: 200px;
+    padding-top: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 40px;
+    height: auto;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.navbar h1 {
+    color: #f9dc5c;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+
+.navbar ul {
+    list-style-type: none;
+}
+
+.navbar li {
+    padding-top: 5px;
+    text-align: center;
+    display: block;
+}
+
+
+.navbar a {
+    text-decoration: none;
+    color: #f9dc5c;
+    font-weight: bold;
+    display: block;
+    padding: 40px 0;
+}
+
+.navbar a:hover {
+    background-color: #f9dc5c;
+    color: #221e22;
+}
+
+.navbar .active {
+    color: #f0803c;
+    font-weight: bold;
+}
+
+/* Form */
+#registration-form {
+    max-width: 700px;
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(35, 30, 35, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 5px solid #f9dc5c;
+}
+
+#loginForm {
+    max-width: 700px;
+    width: 60%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(35, 30, 35, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 5px solid #f9dc5c;
+}
+
+.login-prompt a span:hover {
+    color: #f0803c;
+}
+
+
+label {
+    color: azure;
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #221e22;
+    color: #f9dc5c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+button[type="submit"]:hover {
+    background-color: #f0803c;
+}
+
+button[type="button"] {
+    width: 20%;
+    padding: 10px;
+    background-color: #221e22;
+    color: #f9dc5c;
+    border: 1px solid #f9dc5c;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    display: block; 
+    margin: auto; 
+    margin-bottom: 20px;
+}
+
+button[type="button"]:hover {
+    background-color: #f0803c;
+}
+
+table {
+    margin: 50px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 5px solid #f9dc5c;
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: rgba(35, 30, 35, 0.8);
+    border-radius: 10px;
+    color: azure;
+}
+
+table th,
+table td {
+    padding: 10px;
+    border: 1px solid #f9dc5c;
+    text-align: center;
+}
+
+table th {
+    background-color: #221e22;
+    font-weight: bold;
+}
+
+table button {
+    width: 100px;
+    padding: 10px;
+    margin: auto;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+button.green {
+    margin-right: 20px;
+    background-color: #221e22;
+    border: 1px solid green;
+    color: white;
+}
+
+button.green:hover {
+    background-color: green;
+}
+
+button.red {
+    margin-right: 20px;
+    background-color: #221e22;
+    border: 1px solid red;
+    color: white;
+}
+
+button.red:hover {
+    background-color: red;
+}
+
+button.purple {
+    margin-right: 20px;
+    background-color: #221e22;
+    border: 1px solid purple;
+    color: white;
+}
+
+button.purple:hover {
+    background-color: purple;
+}
+
+
+#announcement-form {
+    max-width: 700px;
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(35, 30, 35, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 5px solid #f9dc5c;
+}
+
+#announcement-form textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services Management</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css">
+</head>
+
+<body>
+    <div class="content">
+        <header>
+        </header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/static/logo.png" alt="Logo">
+                <h1>Peak Performance Gym</h1>
+            </div>
+            <h1 style="text-align: center; color:rgb(255, 255, 255); margin-top: 10px;">(ADMIN)</h1>
+            {% if userHTML == 'admin' %}
+            <ul>
+                <li><a href="/homeHTML">Home</a></li>
+                <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+                <li><a href="/crudUsersHTML">Manage Users</a></li>
+                <li><a class="active" href="/crudServicesHTML">Manage Products & Services</a></li>
+                <li><a href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+            {% elif userHTML == 'user' %}
+            <ul>
+                <li><a href="/homeHTML">Home</a></li>
+                <li><a href="/servicesHTML">Products & Services</a></li>
+                <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+                <li><a href="/userReservationHTML">Reservation History</a></li>
+                <li><a href="/announcementsHTML">Announcements</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+            {% else %}
+            <ul>
+                <li><a href="/homeHTML">Home</a></li>
+                <li><a href="/servicesHTML">Products & Services</a></li>
+                <li><a href="/announcementsHTML">Announcements</a></li>
+                <li><a href="/loginHTML">Register / Log In</a></li>
+            </ul>
+            {% endif %}
+        </nav>
+
+        <h2>Service Management</h2>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Trainer</th>
+                    <th>Capacity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="services_table"></tbody>
+        </table>
+        <a style="text-decoration:none;" href="/createServiceHTML"><button type="button">Create Service</button></a>
+        <h2 style="margin-top: 50px;">Trainer Management</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="trainers_table"></tbody>
+        </table>
+        <a style="text-decoration:none;" href="/createTrainerHTML"><button type="button">Add Trainer</button></a>
+
+        <script>
+            //Display Services in table
+            function fetchServices() {
+                fetch("/services")
+                    .then((response) => response.json())
+                    .then((services) => {
+                        const servicesTable = document.getElementById("services_table");
+                        servicesTable.innerHTML = "";
+                        services.forEach((service) => {
+                            // Fetch trainers
+                            fetch("/trainers")
+                                .then((response) => response.json())
+                                .then((trainers) => {
+                                    const trainerSelectOptions = trainers.map(trainer => {
+                                        if (trainer.surname === service.trainer_surname) {
+                                            return `<option value="${trainer.surname}" selected>${trainer.surname}</option>`;
+                                        } else {
+                                            return `<option value="${trainer.surname}">${trainer.surname}</option>`;
+                                        }
+                                    }).join('');
+                                    const serviceRow = `
+                            <tr id="${service._id}">
+                                <td contenteditable="true">${service.name}</td>
+                                <td contenteditable="true">
+                                    <select id="type_select_${service._id}">
+                                        <option value="team" ${service.service_type === 'team' ? 'selected' : ''}>Team</option>
+                                        <option value="personal" ${service.service_type === 'personal' ? 'selected' : ''}>Personal</option>
+                                    </select>
+                                </td>
+                                <td contenteditable="true">${service.date}</td>
+                                <td contenteditable="true">${service.time}</td>
+                                <td contenteditable="true">
+                                    <select id="trainer_select_${service._id}">
+                                        ${trainerSelectOptions}
+                                    </select>
+                                </td>
+                                <td contenteditable="true">${service.capacity}</td>
+                                <td>
+                                    <button class="green" onclick="updateService('${service._id}')">Update</button>
+                                    <button class="red" onclick="deleteService('${service._id}')">Delete</button>
+                                </td>
+                            </tr>`;
+                                    servicesTable.innerHTML += serviceRow;
+                                })
+                                .catch((error) => console.error("Error:", error));
+                        });
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+
+
+            // Update a service
+            function updateService(serviceId) {
+                const updatedService = {
+                    name: document.getElementById(serviceId).cells[0].innerText,
+                    service_type: document.getElementById(`type_select_${serviceId}`).value,
+                    date: document.getElementById(serviceId).cells[2].innerText,
+                    time: document.getElementById(serviceId).cells[3].innerText,
+                    trainer_surname: document.getElementById(`trainer_select_${serviceId}`).value,
+                    capacity: document.getElementById(serviceId).cells[5].innerText
+                };
+
+                fetch(`/services/${serviceId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedService),
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            fetchServices();
+                        }
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            // Delete an service
+            function deleteService(serviceId) {
+                fetch(`/services/${serviceId}`, {
+                    method: "DELETE",
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            fetchServices();
+                        }
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            fetchServices();
+
+            //Display Trainers in table
+            function fetchTrainers() {
+                fetch("/trainers")
+                    .then((response) => response.json())
+                    .then((trainers) => {
+                        const trainersTable = document.getElementById("trainers_table");
+                        trainersTable.innerHTML = "";
+                        trainers.forEach((trainer) => {
+                            trainersTable.innerHTML += `
+              <tr id="${trainer._id}">
+                <td contenteditable="true">${trainer.name}</td>
+                <td contenteditable="true">${trainer.surname}</td>
+                <td>
+                  <button class="green" onclick="updateTrainer('${trainer._id}')">Update</button>
+                  <button class="red" onclick="deleteTrainer('${trainer._id}')">Delete</button>
+                </td>
+              </tr>
+            `;
+                        });
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+
+            // Update an trainer
+            function updateTrainer(trainerId) {
+                const updatedTrainer = {
+                    name: document.getElementById(trainerId).cells[0].innerText,
+                    surname: document.getElementById(trainerId).cells[1].innerText
+                };
+
+                fetch(`/trainers/${trainerId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedTrainer),
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            fetchTrainers();
+                        }
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            // Delete an trainer
+            function deleteTrainer(trainerId) {
+                fetch(`/trainers/${trainerId}`, {
+                    method: "DELETE",
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            fetchTrainers();
+                        }
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            fetchTrainers();
+        </script>
+    </div>
+</body>
+</body>
+
+</html>

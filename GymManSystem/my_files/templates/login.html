@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log in</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+  </head>
+
+  <body>
+    <div class="content">
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/static/logo.png" alt="Logo" />
+          <h1>Peak Performance Gym</h1>
+        </div>
+        {% if userHTML == 'admin' %}
+        <ul>
+          <li><a class="active" href="/homeHTML">Home</a></li>
+          <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+          <li><a href="/crudUsersHTML">Manage Users</a></li>
+          <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+          <li><a href="/createAnnouncementHTML">Manage Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% elif userHTML == 'user' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+          <li><a href="/userReservationHTML">Reservation History</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="servicesHTML">Products & Services</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a class="active" href="/loginHTML">Register / Log In</a></li>
+        </ul>
+        {% endif %}
+      </nav>
+      <h2>Log in</h2>
+      <form id="loginForm">
+        <label for="username">Username:</label><br />
+        <input type="text" id="username" name="username" /><br />
+        <label for="password">Password:</label><br />
+        <input type="password" id="password" name="password" /><br /><br />
+        <button type="submit">Log in</button>
+        <div class="login-prompt" style="padding-top: 10px">
+          <a href="\registerHTML" style="text-decoration: none; color: #ffffff"
+            >Don't have an account?
+            <span style="font-size: larger; font-weight: bolder"
+              >Register Today!</span
+            ></a
+          >
+        </div>
+      </form>
+      <script>
+        document
+          .getElementById("loginForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch("/login", {
+              method: "POST",
+              body: JSON.stringify(Object.fromEntries(formData)),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                alert(data.message);
+                if (data.success) {
+                  if (data.userRole === "admin") {
+                    window.location.href = "/homeHTML";
+                  } else if (data.userRole === "user") {
+                    window.location.href = "/homeHTML";
+                  }
+                  document.getElementById("username").value = "";
+                  document.getElementById("password").value = "";
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again later.");
+              });
+          });
+      </script>
+    </div>
+  </body>
+</html>

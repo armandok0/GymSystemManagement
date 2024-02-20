@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pending Users</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+  </head>
+  <body>
+    <div class="content">
+      <header></header>
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/static/logo.png" alt="Logo" />
+          <h1>Peak Performance Gym</h1>
+        </div>
+        <h1
+          style="
+            text-align: center;
+            color: rgb(255, 255, 255);
+            margin-top: 10px;
+          "
+        >
+          (ADMIN)
+        </h1>
+        {% if userHTML == 'admin' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li>
+            <a class="active" href="/pendingUsersHTML">Manage Registrations</a>
+          </li>
+          <li><a href="/crudUsersHTML">Manage Users</a></li>
+          <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+          <li><a href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% elif userHTML == 'user' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+          <li><a href="/userReservationHTML">Reservation History</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/loginHTML">Register / Log In</a></li>
+        </ul>
+        {% endif %}
+      </nav>
+
+      <h2>Pending Users</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="pendingTable"></tbody>
+      </table>
+
+      <script>
+        // Function to load pending users
+        function loadPendingUsers() {
+          fetch("/pendingUsers")
+            .then((response) => response.json())
+            .then((data) => {
+              const tableBody = document.getElementById("pendingTable");
+              tableBody.innerHTML = "";
+              data.forEach((user) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                            <td>${user.first_name}</td>
+                            <td>${user.last_name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.username}</td>
+                            <td>
+                                <button class="green" onclick="approveUser('${user._id}')">Approve</button>
+                                <button class="red" onclick="rejectUser('${user._id}')">Reject</button>
+                            </td>
+                        `;
+                tableBody.appendChild(row);
+              });
+            })
+            .catch((error) =>
+              console.error("Error fetching pending users:", error)
+            );
+        }
+
+        // Approve a user
+        function approveUser(userId) {
+          const role = prompt("Enter role for the user (admin/user):");
+          if (role !== null && (role === "admin" || role === "user")) {
+            fetch(`/userRole/${userId}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ role: role }),
+            })
+              .then((response) => {
+                if (response.ok) {
+                  alert("User approved successfully");
+                  loadPendingUsers();
+                } else {
+                  alert("Failed to approve user");
+                }
+              })
+              .catch((error) => console.error("Error approving user:", error));
+          } else if (role !== null) {
+            alert('Invalid role. Please enter "admin" or "user".');
+          }
+        }
+
+        // Reject a user
+        function rejectUser(userId) {
+          fetch(`/userRole/${userId}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.ok) {
+                alert("User rejected and deleted successfully");
+                loadPendingUsers();
+              } else {
+                alert("Failed to reject user");
+              }
+            })
+            .catch((error) => console.error("Error rejecting user:", error));
+        }
+
+        // Load pending users when the page loads
+        window.onload = loadPendingUsers;
+      </script>
+    </div>
+  </body>
+</html>

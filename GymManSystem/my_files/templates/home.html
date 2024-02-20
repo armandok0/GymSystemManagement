@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+  <style>
+    .first-section {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 50px;
+    }
+
+    .polaroid {
+      position: relative;
+      margin: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 700px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+
+    }
+
+    .polaroid:hover {
+      transform: scale(1.05);
+    }
+
+    .polaroid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .company-description {
+      margin: 90px;
+      margin-top: 40px;
+      color: #fff;
+    }
+
+    header {
+      text-align: center;
+      font-weight: bolder;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: xx-large;
+      color: aliceblue;
+      margin-top: 30px;
+    }
+
+    h3 {
+      color: #F9DC5C;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    {% if userHTML == 'admin' %}
+    <header>ADMIN ACCESS</header>
+    {% elif userHTML == 'user' %}
+    <header>WELCOME BACK TO OUR PAGE!</header>
+    {% else %}
+    <header>WELCOME TO OUR PAGE!</header>
+    {% endif %}
+
+
+    <nav class="navbar">
+      <div class="logo">
+        <img src="/static/logo.png" alt="Logo" />
+        <h1>Peak Performance Gym</h1>
+      </div>
+      {% if userHTML == 'admin' %}
+      <h1 style="text-align: center; color:rgb(255, 255, 255); margin-top: 10px;">(ADMIN)</h1>
+      <ul>
+        <li><a class="active" href="/homeHTML">Home</a></li>
+        <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+        <li><a href="/crudUsersHTML">Manage Users</a></li>
+        <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+        <li><a href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+        <li><a href="/logout">Log Out</a></li>
+      </ul>
+      {% elif userHTML == 'user' %}
+      <ul>
+        <li><a class="active" href="/homeHTML">Home</a></li>
+        <li><a href="/servicesHTML">Products & Services</a></li>
+        <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+        <li><a href="/userReservationHTML">Reservation History</a></li>
+        <li><a href="/announcementsHTML">Announcements</a></li>
+        <li><a href="/logout">Log Out</a></li>
+      </ul>
+      {% else %}
+      <ul>
+        <li><a class="active" href="/homeHTML">Home</a></li>
+        <li><a href="/servicesHTML">Products & Services</a></li>
+        <li><a href="/announcementsHTML">Announcements</a></li>
+        <li><a href="/loginHTML">Register / Log In</a></li>
+      </ul>
+      {% endif %}
+    </nav>
+
+    <div class="first-section">
+      <div class="polaroid">
+        <img src="/static/home-image1.jpg" alt="Image 1" />
+      </div>
+      <div class="polaroid">
+        <img src="/static/home-image3.webp" alt="Image 2" />
+      </div>
+      <div class="polaroid">
+        <img src="/static/home-image2.jpg" alt="Image 3" />
+      </div>
+    </div>
+    <div class="first-section">
+      <div class="polaroid">
+        <img src="/static/home-image4.jpg" alt="Image 1" />
+      </div>
+      <div class="polaroid">
+        <img src="/static/home-image5.jpg" alt="Image 2" />
+      </div>
+      <div class="polaroid">
+        <img src="/static/home-image6.jpeg" alt="Image 3" />
+      </div>
+    </div>
+
+    <div class="company-description">
+      <h3>Welcome Aboard</h3>
+      <p>Welcome to Peak Performance Gym, where fitness meets excellence in a dynamic and supportive environment. Our
+        premier fitness facility is dedicated to providing you with the tools, resources, and expertise you need to
+        unlock your full potential and achieve your fitness goals.</p>
+
+      <h3>Our Goal</h3>
+      <p>At Peak Performance Gym, we believe that fitness is not just a destination, but a journey - a journey of
+        self-discovery, growth, and transformation. That's why we offer a comprehensive range of services and amenities
+        designed to support you every step of the way.</p>
+
+      <h3>State-of-the-Art Facilities</h3>
+      <p>Our state-of-the-art facility features top-of-the-line equipment from leading fitness brands, including cardio
+        machines, strength training equipment, functional training areas, and more. Whether you're a seasoned athlete or
+        a beginner, you'll find everything you need to challenge yourself and achieve your fitness goals.</p>
+
+      <h3>Expert Trainers</h3>
+      <p>Our team of experienced and certified trainers are dedicated to helping you succeed. With personalized training
+        programs, expert guidance, and ongoing support, our trainers will help you optimize your workouts, prevent
+        injuries, and maximize your results.</p>
+
+      <h3>Comprehensive Programs</h3>
+      <p>From group fitness classes and personal training sessions to nutrition counseling and recovery services, we
+        offer a wide range of programs to suit your individual needs and preferences. Whether you're looking to lose
+        weight, build muscle, improve your athletic performance, or simply lead a healthier lifestyle, we have a program
+        for you.</p>
+
+      <h3>Supportive Community</h3>
+      <p>At Peak Performance Gym, you'll find a supportive and inclusive community of like-minded individuals who share
+        your passion for health and fitness. Our community events, challenges, and social gatherings provide
+        opportunities to connect, motivate each other, and celebrate our successes together.</p>
+
+      <h3>Holistic Approach</h3>
+      <p>We believe that true fitness encompasses more than just physical strength - it's about mental resilience,
+        emotional well-being, and overall vitality. That's why we offer a holistic approach to health and wellness that
+        addresses all aspects of your well-being, including nutrition, stress management, sleep, and recovery. Whether
+        you're a seasoned athlete or a complete beginner, Peak Performance Gym has everything you need to
+        succeed. Join us today and experience the difference for yourself!</p>
+
+    </div>
+  </div>
+</body>
+
+</html>

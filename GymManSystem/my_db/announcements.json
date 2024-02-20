@@ -1,0 +1,49 @@
+[{
+  "_id": {
+    "$oid": "65ce6ba6c7a5e5641eed7b22"
+  },
+  "title": "Opening Hours",
+  "content": "Monday: 9:00 AM - 6:00 PM Tuesday: 9:00 AM - 6:00 PM Wednesday: 9:00 AM - 6:00 PM Thursday: 9:00 AM - 8:00 PM Friday: 9:00 AM - 8:00 PM Saturday: 10:00 AM - 4:00 PM Sunday: Closed"
+},
+{
+  "_id": {
+    "$oid": "65cfa7ea706c2b1bf7722e36"
+  },
+  "title": "Personal Training Packages",
+  "content": "Take your fitness journey to the next level with our personalized training packages. Our certified personal trainers are here to help you set goals, stay motivated, and achieve results tailored to your individual needs."
+},
+{
+  "_id": {
+    "$oid": "65cfa7fb706c2b1bf7722e37"
+  },
+  "title": "Member Appreciation Discounts",
+  "content": "As a token of our appreciation for your continued support, we're offering exclusive discounts on select gym merchandise and services for our valued members. Don't miss out on these special savings!"
+},
+{
+  "_id": {
+    "$oid": "65cfa80a706c2b1bf7722e38"
+  },
+  "title": "Specialized Training Zones",
+  "content": "Explore our newly designed training zones equipped with state-of-the-art equipment for strength training, cardio workouts, and functional training. Whether you're a beginner or a fitness enthusiast, there's something for everyone!"
+},
+{
+  "_id": {
+    "$oid": "65cfa829706c2b1bf7722e39"
+  },
+  "title": "NEW Nutrition Workshops",
+  "content": "Achieve your fitness goals faster with expert guidance on nutrition and healthy eating habits. Join our upcoming nutrition workshops led by certified dietitians to learn practical tips for fueling your body and maximizing your results."
+},
+{
+  "_id": {
+    "$oid": "65cfa837706c2b1bf7722e3a"
+  },
+  "title": "Family-Friendly Activities",
+  "content": "Get the whole family involved in fitness with our new family-friendly activities. From parent-child fitness classes to youth sports clinics, we're dedicated to promoting a healthy and active lifestyle for all ages."
+},
+{
+  "_id": {
+    "$oid": "65cfa845706c2b1bf7722e3b"
+  },
+  "title": "Member Rewards Program",
+  "content": "Earn rewards for your dedication and commitment to fitness with our new member rewards program. Accumulate points for attending classes, referring friends, and achieving personal milestones, then redeem your points for exclusive perks and discounts."
+}]

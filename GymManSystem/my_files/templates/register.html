@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+  </head>
+
+  <body>
+    <div class="content">
+      <header></header>
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/static/logo.png" alt="Logo" />
+          <h1>Peak Performance Gym</h1>
+        </div>
+        {% if userHTML == 'admin' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+          <li><a href="/crudUsersHTML">Manage Users</a></li>
+          <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+          <li><a href="/createAnnouncementHTML">Manage Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% elif userHTML == 'user' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+          <li><a href="/userReservationHTML">Reservation History</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a class="active" href="/loginHTML">Register / Log In</a></li>
+        </ul>
+        {% endif %}
+      </nav>
+      <h2>Registration Form</h2>
+      <form id="registration-form">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required /><br />
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required /><br />
+
+        <label for="country">Country:</label>
+        <select id="country" name="country" required>
+          <option value="">Select Country</option></select
+        ><br />
+
+        <label for="city">City:</label>
+        <select id="city" name="city" required>
+          <option value="">Select City</option></select
+        ><br />
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required /><br />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required /><br />
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required /><br />
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required /><br />
+
+        <label for="confirm_password">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirm_password"
+          name="confirm_password"
+          required
+        /><br />
+
+        <button type="submit">Register</button>
+
+        <div class="login-prompt" style="padding-top: 10px">
+          <a href="\loginHTML" style="text-decoration: none; color: #ffffff"
+            >Already registered?
+            <span style="font-size: larger; font-weight: bolder"
+              >Log In</span
+            ></a
+          >
+        </div>
+      </form>
+
+      <div id="responseMessage"></div>
+
+      <script>
+        //Countries dropdown
+        fetch("/countries")
+          .then((response) => response.json())
+          .then((data) => {
+            var countryDropdown = document.getElementById("country");
+            data.forEach((country) => {
+              countryDropdown.innerHTML +=
+                "<option value='" +
+                country["country"] +
+                "'>" +
+                country["country"] +
+                "</option>";
+            });
+          })
+          .catch((error) => console.error("Error:", error));
+
+        //Cities dropdown based on selected country
+        document
+          .getElementById("country")
+          .addEventListener("change", function () {
+            var selectedCountry = this.value;
+            var cityDropdown = document.getElementById("city");
+            cityDropdown.innerHTML = "<option value=''>Select City</option>";
+            fetch("/cities", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ country: selectedCountry }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                data.forEach((city) => {
+                  cityDropdown.innerHTML +=
+                    "<option value='" + city + "'>" + city + "</option>";
+                });
+              })
+              .catch((error) => console.error("Error:", error));
+          });
+
+        // Form submission
+        document
+          .getElementById("registration-form")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            var form = event.target;
+            var password = form.querySelector('input[name="password"]').value;
+            var confirmPassword = form.querySelector(
+              'input[name="confirm_password"]'
+            ).value;
+            if (password !== confirmPassword) {
+              alert("Passwords do not match. Please enter matching passwords.");
+              return;
+            }
+            var formData = {
+              first_name: form.querySelector('input[name="first_name"]').value,
+              last_name: form.querySelector('input[name="last_name"]').value,
+              country: form.querySelector('select[name="country"]').value,
+              city: form.querySelector('select[name="city"]').value,
+              address: form.querySelector('input[name="address"]').value,
+              email: form.querySelector('input[name="email"]').value,
+              username: form.querySelector('input[name="username"]').value,
+              password: password,
+              confirm_password: confirmPassword,
+            };
+            fetch("/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                var message = data.message;
+                alert(message);
+                if (message === "Registration successful!") {
+                  form.reset();
+                }
+              })
+              .catch((error) => console.error("Error:", error));
+          });
+      </script>
+    </div>
+  </body>
+</html>

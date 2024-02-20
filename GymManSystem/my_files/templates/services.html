@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+    <style>
+        .service-box {
+            border: 1px solid #F0803C;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            margin-bottom: 50px;
+            background-color: #ffffff;
+            color: aliceblue;
+            width: 400px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .service-box h3 {
+            margin: 0;
+        }
+
+        .content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        header {
+            text-align: center;
+            font-weight: bolder;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: xx-large;
+            color: aliceblue;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            text-align: center;
+            color: #000000;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>&#x1F3CB;Our Services&#x1F3CB;</header>
+
+    <div class="content">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/static/logo.png" alt="Logo" />
+                <h1>Peak Performance Gym</h1>
+            </div>
+            {% if userHTML == 'admin' %}
+            <h1 style="text-align: center; color:rgb(255, 255, 255); margin-top: 10px;">(ADMIN)</h1>
+            <ul>
+                <li><a class="active" href="/homeHTML">Home</a></li>
+                <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+                <li><a href="/crudUsersHTML">Manage Users</a></li>
+                <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+                <li><a href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+            {% elif userHTML == 'user' %}
+            <ul>
+                <li><a href="/homeHTML">Home</a></li>
+                <li><a class="active" href="/servicesHTML">Products & Services</a></li>
+                <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+                <li><a href="/userReservationHTML">Reservation History</a></li>
+                <li><a href="/announcementsHTML">Announcements</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+            {% else %}
+            <ul>
+                <li><a href="/homeHTML">Home</a></li>
+                <li><a class="active" href="/servicesHTML">Products & Services</a></li>
+                <li><a href="/announcementsHTML">Announcements</a></li>
+                <li><a href="/loginHTML">Register / Log In</a></li>
+            </ul>
+            {% endif %}
+        </nav>
+
+        <div class="announcements">
+            {% for service in services %}
+            <div class="service-box">
+                <h3>{{ service.name }}</h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>

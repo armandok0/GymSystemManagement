@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Announcements Management</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css">
+</head>
+<body>
+    <div class="content">
+        <header>
+        </header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/static/logo.png" alt="Logo">
+                <h1>Peak Performance Gym</h1>
+            </div>
+            {% if userHTML == 'admin' %}
+            <h1 style="text-align: center; color:rgb(255, 255, 255); margin-top: 10px;">(ADMIN)</h1>
+            <ul>
+              <li><a href="/homeHTML">Home</a></li>
+              <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+              <li><a href="/crudUsersHTML">Manage Users</a></li>
+              <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+              <li><a  class="active"  href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+              <li><a href="/logout">Log Out</a></li>
+            </ul>
+            {% elif userHTML == 'user' %}
+            <ul>
+              <li><a class="active" href="/homeHTML">Home</a></li>
+              <li><a href="/servicesHTML">Products & Services</a></li>
+              <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+              <li><a href="/userReservations">Reservation History</a></li>
+              <li><a href="/announcementsHTML">Announcements</a></li>
+              <li><a href="/logout">Log Out</a></li>
+            </ul>
+            {% else %}
+            <ul>
+              <li><a href="/homeHTML">Home</a></li>
+              <li><a href="/servicesHTML">Products & Services</a></li>
+              <li><a href="/announcementsHTML">Announcements</a></li>
+              <li><a href="/loginHTML">Register / Log In</a></li>
+            </ul>
+            {% endif %}
+        </nav>
+
+        <h2>Announcement Management</h2>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="announcements_table"></tbody>
+        </table>
+        <a style="text-decoration:none;" href="/createAnnouncementHTML"><button type="button">Create
+                Announcement</button></a>
+
+        <script>
+            //Display Announcements in table
+            function fetchAnnouncements() {
+                fetch("/announcements")
+                    .then((response) => response.json())
+                    .then((announcements) => {
+                        const announcementsTable = document.getElementById("announcements_table");
+                        announcementsTable.innerHTML = "";
+                        announcements.forEach((announcement) => {
+                            announcementsTable.innerHTML += `
+              <tr id="${announcement._id}">
+                <td contenteditable="true">${announcement.title}</td>
+                <td contenteditable="true">${announcement.content}</td>
+                <td>
+                  <button class="green" onclick="updateAnnouncement('${announcement._id}')">Update</button>
+                  <button class="red" onclick="deleteAnnouncement('${announcement._id}')">Delete</button>
+                </td>
+              </tr>
+            `;
+                        });
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            // Update an announcement
+            function updateAnnouncement(announcementId) {
+                const updatedAnnouncement = {
+                    title: document.getElementById(announcementId).cells[0].innerText,
+                    content: document.getElementById(announcementId).cells[1].innerText
+                };
+
+                fetch(`/announcements/${announcementId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedAnnouncement),
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            fetchAnnouncements();
+                        }
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            // Delete an announcement
+            function deleteAnnouncement(announcementId) {
+                fetch(`/announcements/${announcementId}`, {
+                    method: "DELETE",
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            fetchAnnouncements();
+                        }
+                    })
+                    .catch((error) => console.error("Error:", error));
+            }
+
+            fetchAnnouncements();
+        </script>
+    </div>
+</body>
+</body>
+</html>

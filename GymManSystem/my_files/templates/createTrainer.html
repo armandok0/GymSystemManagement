@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Service</title>
+    <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+  </head>
+
+  <body>
+    <div class="content">
+      <header></header>
+      <nav class="navbar">
+        <div class="logo">
+          <img src="/static/logo.png" alt="Logo" />
+          <h1>Peak Performance Gym</h1>
+        </div>
+        <h1
+          style="
+            text-align: center;
+            color: rgb(255, 255, 255);
+            margin-top: 10px;
+          "
+        >
+          (ADMIN)
+        </h1>
+        {% if userHTML == 'admin' %}
+        <ul>
+          <li><a class="active" href="/homeHTML">Home</a></li>
+          <li><a href="/pendingUsersHTML">Manage Registrations</a></li>
+          <li><a href="/crudUsersHTML">Manage Users</a></li>
+          <li><a href="/crudServicesHTML">Manage Products & Services</a></li>
+          <li><a href="/crudAnnouncementsHTML">Manage Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% elif userHTML == 'user' %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/checkAvailabilityHTML">Book Reservations</a></li>
+          <li><a href="/userReservationHTML">Reservation History</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/homeHTML">Home</a></li>
+          <li><a href="/servicesHTML">Products & Services</a></li>
+          <li><a href="/announcementsHTML">Announcements</a></li>
+          <li><a href="/loginHTML">Register / Log In</a></li>
+        </ul>
+        {% endif %}
+      </nav>
+      <h2>Trainer Form</h2>
+      <form id="loginForm">
+        <label for="name">Trainer Name:</label>
+        <input type="text" id="name" name="name" required /> <br />
+
+        <label for="surname">Trainer Surname:</label>
+        <input type="text" id="surname" name="surname" required /> <br />
+
+        <button type="submit">Create</button>
+
+        <div class="login-prompt" style="padding-top: 10px">
+          <a
+            href="\crudServicesHTML"
+            style="text-decoration: none; color: #ffffff"
+          >
+            <span style="font-size: larger; font-weight: bolder"
+              >See all trainers</span
+            ></a
+          >
+        </div>
+      </form>
+
+      <div id="responseMessage"></div>
+
+      <script>
+        // Form submission
+        document
+          .getElementById("loginForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = {
+              name: form.querySelector('input[name="name"]').value,
+              surname: form.querySelector('input[name="surname"]').value,
+            };
+            fetch("/createTrainers", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                var message = data.message;
+                alert(message);
+                if (message === "Trainer uploaded successfully!") {
+                  form.reset();
+                }
+              })
+              .catch((error) => console.error("Error:", error));
+          });
+      </script>
+    </div>
+  </body>
+</html>

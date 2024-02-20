@@ -1,0 +1,99 @@
+[{
+  "_id": {
+    "$oid": "65ce6877c7a5e5641eed7b20"
+  },
+  "name": "Pilates",
+  "service_type": "team",
+  "date": "2024-02-15",
+  "time": "13:00",
+  "trainer_surname": "Panakis",
+  "capacity": 49
+},
+{
+  "_id": {
+    "$oid": "65cfa6c4706c2b1bf7722e2e"
+  },
+  "name": "Pool",
+  "service_type": "team",
+  "date": "2024-02-28",
+  "time": "23:20",
+  "trainer_surname": "Kolosakis",
+  "capacity": 10
+},
+{
+  "_id": {
+    "$oid": "65cfa6e0706c2b1bf7722e2f"
+  },
+  "name": "Strength & Conditioning",
+  "service_type": "personal",
+  "date": "2024-02-26",
+  "time": "16:20",
+  "trainer_surname": "Panakis",
+  "capacity": "5"
+},
+{
+  "_id": {
+    "$oid": "65cfa70e706c2b1bf7722e30"
+  },
+  "name": "Yoga",
+  "service_type": "team",
+  "date": "2024-02-18",
+  "time": "13:00",
+  "trainer_surname": "Kolosakis",
+  "capacity": "12"
+},
+{
+  "_id": {
+    "$oid": "65cfa730706c2b1bf7722e31"
+  },
+  "name": "Weightlifting ",
+  "service_type": "personal",
+  "date": "2024-02-12",
+  "time": "23:25",
+  "trainer_surname": "Panakis",
+  "capacity": "14"
+},
+{
+  "_id": {
+    "$oid": "65cfa75b706c2b1bf7722e32"
+  },
+  "name": "Flexibility & Mobility ",
+  "service_type": "team",
+  "date": "2024-02-26",
+  "time": "11:00",
+  "trainer_surname": "Panakis",
+  "capacity": 17
+},
+{
+  "_id": {
+    "$oid": "65cfa77b706c2b1bf7722e33"
+  },
+  "name": "CrossFit",
+  "service_type": "personal",
+  "date": "2024-02-19",
+  "time": "23:05",
+  "trainer_surname": "Kolosakis",
+  "capacity": "5"
+},
+{
+  "_id": {
+    "$oid": "65cfa79a706c2b1bf7722e34"
+  },
+  "name": "Sauna session",
+  "service_type": "team",
+  "date": "2024-02-29",
+  "time": "22:25",
+  "trainer_surname": "Panakis",
+  "capacity": 11
+},
+{
+  "_id": {
+    "$oid": "65cfa7c0706c2b1bf7722e35"
+  },
+  "name": "Hot tub / cold plunge",
+  "service_type": "team",
+  "date": "2024-03-13",
+  "time": "12:25",
+  "trainer_surname": "Panakis",
+  "capacity": 22
+}]
