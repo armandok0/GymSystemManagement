@@ -43,3 +43,7 @@ python app.py
 ```
 Η εφαρμογή θα είναι διαθέσιμη στη διεύθυνση http://localhost:5000/homeHTML.
 Η εφαρμογή τρέχει στην πόρτα 5000 με Flask και η MongoDB στην πόρτα 27017.
+##
+<div align="center">
+  <img src="GymManSystem/homePage.png" alt="Home Page Screenshot">
+</div>
